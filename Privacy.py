@@ -15,7 +15,7 @@ ACCESSToken = "1083509663512043520-QCkLv3nZkNbHGzKsFeqBNxrTi5KKW8"
 ACCESSTOKENSECRET = "baePC6AiSM5e79ugWvYw5zRl5uizR8hi7kylO72uUUJJR"
 
 keywords = ["VPN", "ProtonVPN", "NordVPN", "IP", "StartPage", "FireFox", "Cookies", "Trackers", "Google" 
-, "DuckDuckGo", "Amazon", "2FA", "MFA", "Tracking me", "My Privacy", "My Data", "Access to my Data"]
+, "DuckDuckGo", "Amazon", "2FA", "MFA", "Tracking me", "My Privacy"]
 
 wordCloud = {}
 users = {}
@@ -41,6 +41,7 @@ def unqiueTweet(tweet):
     else:
         tweets[tweet] = 1
 
+
 def removeStopWords(tweet):
     stop_words = set(stopwords.words('english')) 
     filtered_sentence = [w for w in tweet if not w in stop_words] 
@@ -48,6 +49,9 @@ def removeStopWords(tweet):
     for w in tweet: 
         if w not in stop_words: 
             filtered_sentence.append(w) 
+    for w in filtered_sentence:
+        if '@' in w:
+            filtered_sentence.remove(w)
     return filtered_sentence
 
 class tweetListener(StreamListener):
@@ -55,7 +59,7 @@ class tweetListener(StreamListener):
     def on_data(self, data):
         try:
             tweet = json.loads(data)
-            #tweetUser = tweet['screen_name']
+            tweetUser = tweet['screen_name']
             tweetTextList = removeStopWords(tweet['text'].split(" "))
             checkForWord(check(tweetTextList, keywords))
             return True
